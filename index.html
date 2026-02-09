@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Senuri Bot - Pairing Code</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            max-width: 500px;
+            width: 100%;
+            padding: 40px;
+            text-align: center;
+            animation: fadeIn 0.6s ease;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .logo {
+            font-size: 60px;
+            margin-bottom: 10px;
+            animation: bounce 2s infinite;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        h1 {
+            color: #764ba2;
+            margin-bottom: 10px;
+            font-size: 2em;
+        }
+
+        .subtitle {
+            color: #666;
+            margin-bottom: 30px;
+            font-size: 0.9em;
+        }
+
+        .input-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            text-align: left;
+            margin-bottom: 8px;
+            color: #333;
+            font-weight: 600;
+        }
+
+        input {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #ddd;
+            border-radius: 10px;
+            font-size: 16px;
+            transition: all 0.3s;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: #764ba2;
+            box-shadow: 0 0 0 3px rgba(118, 75, 162, 0.1);
+        }
+
+        .btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 15px 40px;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            width: 100%;
+            transition: all 0.3s;
+            margin-top: 10px;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(118, 75, 162, 0.4);
+        }
+
+        .btn:active {
+            transform: translateY(0);
+        }
+
+        .btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .loading {
+            display: none;
+            margin: 20px 0;
+        }
+
+        .spinner {
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #764ba2;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .result {
+            display: none;
+            margin-top: 20px;
+            padding: 20px;
+            border-radius: 10px;
+            animation: slideIn 0.5s ease;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateX(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .success {
+            background: #d4edda;
+            border: 2px solid #28a745;
+            color: #155724;
+        }
+
+        .error {
+            background: #f8d7da;
+            border: 2px solid #dc3545;
+            color: #721c24;
+        }
+
+        .code-display {
+            font-size: 2em;
+            font-weight: bold;
+            color: #764ba2;
+            letter-spacing: 3px;
+            margin: 15px 0;
+            font-family: 'Courier New', monospace;
+        }
+
+        .instructions {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 20px;
+            text-align: left;
+        }
+
+        .instructions h3 {
+            color: #764ba2;
+            margin-bottom: 10px;
+        }
+
+        .instructions ol {
+            margin-left: 20px;
+            color: #555;
+        }
+
+        .instructions li {
+            margin: 8px 0;
+            line-height: 1.6;
+        }
+
+        .footer {
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid #ddd;
+            color: #666;
+            font-size: 0.85em;
+        }
+
+        .footer a {
+            color: #764ba2;
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                padding: 25px;
+            }
+            h1 {
+                font-size: 1.5em;
+            }
+            .code-display {
+                font-size: 1.5em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="logo">🎀</div>
+        <h1>Senuri Bot</h1>
+        <p class="subtitle">WhatsApp Multi-Device Bot Pairing</p>
+
+        <div class="input-group">
+            <label for="phoneNumber">📱 Enter Your Phone Number</label>
+            <input 
+                type="tel" 
+                id="phoneNumber" 
+                placeholder="94712345678" 
+                maxlength="12"
+            >
+            <small style="color: #666; display: block; margin-top: 5px;">
+                Format: 94XXXXXXXXX (with country code, no +)
+            </small>
+        </div>
+
+        <button class="btn" onclick="getPairingCode()">
+            🔑 Get Pairing Code
+        </button>
+
+        <div class="loading" id="loading">
+            <div class="spinner"></div>
+            <p style="margin-top: 10px; color: #764ba2;">Generating code...</p>
+        </div>
+
+        <div class="result success" id="success">
+            <h3>✅ Pairing Code Generated!</h3>
+            <div class="code-display" id="pairingCode">----</div>
+            <p>Copy this code and paste it in WhatsApp</p>
+        </div>
+
+        <div class="result error" id="error">
+            <h3>❌ Error</h3>
+            <p id="errorMessage">Something went wrong. Please try again.</p>
+        </div>
+
+        <div class="instructions">
+            <h3>📖 How to Connect:</h3>
+            <ol>
+                <li>Enter your WhatsApp number above</li>
+                <li>Click "Get Pairing Code" button</li>
+                <li>Open WhatsApp on your phone</li>
+                <li>Go to <strong>Settings → Linked Devices</strong></li>
+                <li>Tap <strong>"Link a Device"</strong></li>
+                <li>Choose <strong>"Link with phone number instead"</strong></li>
+                <li>Enter the pairing code shown above</li>
+            </ol>
+        </div>
+
+        <div class="footer">
+            Made with 💖 by <a href="https://wa.me/94768867146" target="_blank">Indumina</a>
+            <br>
+            Senuri Bot V2.0 - Enhanced Edition
+        </div>
+    </div>
+
+    <script>
+        // API URL - වෙනස් කරන්න ඔබගේ Render URL එකට
+        const API_URL = 'https://your-render-app.onrender.com/pair';
+
+        async function getPairingCode() {
+            const phoneInput = document.getElementById('phoneNumber');
+            const phoneNumber = phoneInput.value.trim();
+            
+            // Reset displays
+            document.getElementById('success').style.display = 'none';
+            document.getElementById('error').style.display = 'none';
+            
+            // Validate phone number
+            if (!phoneNumber) {
+                showError('Please enter your phone number');
+                return;
+            }
+            
+            if (!/^\d{10,12}$/.test(phoneNumber)) {
+                showError('Invalid phone number format. Use: 94XXXXXXXXX');
+                return;
+            }
+            
+            // Show loading
+            document.getElementById('loading').style.display = 'block';
+            document.querySelector('.btn').disabled = true;
+            
+            try {
+                const response = await fetch(`${API_URL}?number=${phoneNumber}`);
+                const data = await response.json();
+                
+                if (data.code) {
+                    showSuccess(data.code);
+                } else {
+                    showError(data.error || 'Failed to generate code');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                showError('Connection failed. Make sure the bot is running on Render.');
+            } finally {
+                document.getElementById('loading').style.display = 'none';
+                document.querySelector('.btn').disabled = false;
+            }
+        }
+        
+        function showSuccess(code) {
+            document.getElementById('pairingCode').textContent = code;
+            document.getElementById('success').style.display = 'block';
+        }
+        
+        function showError(message) {
+            document.getElementById('errorMessage').textContent = message;
+            document.getElementById('error').style.display = 'block';
+        }
+        
+        // Enter key support
+        document.getElementById('phoneNumber').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                getPairingCode();
+            }
+        });
+        
+        // Auto-format phone number
+        document.getElementById('phoneNumber').addEventListener('input', function(e) {
+            this.value = this.value.replace(/[^0-9]/g, '');
+        });
+    </script>
+</body>
+</html>
